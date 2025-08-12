@@ -1,0 +1,30 @@
+from queue import PriorityQueue
+
+def uniform_cost_search(graph, start, goal):
+    visited = set()
+    pq = PriorityQueue()
+    pq.put((0, [start]))  # (cost, path)
+
+    while not pq.empty():
+        cost, path = pq.get()
+        node = path[-1]
+
+        if node == goal:
+            return path, cost
+
+        if node not in visited:
+            visited.add(node)
+            for neighbor, edge_cost in graph[node]:
+                if neighbor not in visited:
+                    pq.put((cost + edge_cost, path + [neighbor]))
+
+    return None
+
+graph = {
+    'A': [('B', 1), ('C', 4)],
+    'B': [('A', 1), ('D', 2), ('E', 5)],
+    'C': [('A', 4), ('E', 1)],
+    'D': [('B', 2), ('E', 3)],
+    'E': [('B', 5), ('C', 1), ('D', 3)]
+}
+print(uniform_cost_search(graph, 'A', 'E'))
